@@ -1,10 +1,14 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+// Importaciones de dependencias
+import ReactDOM from "react-dom/client";
+// Importaciones de componentes, funciones y modelos
+import App from "./App.tsx";
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+// Importaciones de estilos
+import "./index.css";
+
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <>
     <App />
-  </StrictMode>,
-)
+  </>
+);
