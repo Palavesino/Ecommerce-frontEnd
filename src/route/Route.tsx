@@ -6,7 +6,7 @@ import { Suspense, lazy } from "react";
 import RoutesWithNotFound from "../util/routes-with-not-found";
 
 
-// const Products = lazy(() => import('./RouteAccessRole.tsx'));
+ const Products = lazy(() => import('../components/product/Products'));
 
 
 
@@ -18,8 +18,7 @@ const Router = () => {
         <RoutesWithNotFound>
 
           <Route path="/" element={
-            //    <Products />
-            <h1>Hello new world </h1>
+               <Products />
            } />
           
         </RoutesWithNotFound>
