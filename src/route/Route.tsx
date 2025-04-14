@@ -2,11 +2,9 @@ import { Route } from "react-router-dom";
 
 
 // Importaciones de Assets
-import { Suspense, lazy } from "react";
+import { Suspense } from "react";
 import RoutesWithNotFound from "../util/routes-with-not-found";
-
-
- const Products = lazy(() => import('../components/product/Products'));
+import Products from "../components/product/Products";
 
 
 

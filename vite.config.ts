@@ -5,8 +5,6 @@ export default defineConfig(({ mode }) => {
   // 1. Cargar variables explícitamente
   const env = loadEnv(mode, process.cwd(), 'VITE_');
   
-  // 2. Debug (verifica en terminal al ejecutar npm run dev)
-  console.log('✅ URL del API:', env.VITE_URL_DOMAIN);
 
   return {
     server: {

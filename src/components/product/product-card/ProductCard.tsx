@@ -26,13 +26,6 @@ interface ProductCardProps {
  */
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   // Ruta base según entorno (desarrollo/producción)
-  console.log(import.meta.env.NODE_ENV)
-  const basePath = '/../../../../public/uploads'
-
-  const subFolder = product.isManufactured
-    ? 'manufactured_products'
-    : 'products';
-
   const imageUrl = product.imageUrl
     ? `${product.imageUrl}`
     : 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
