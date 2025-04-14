@@ -29,21 +29,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   console.log(import.meta.env.NODE_ENV)
   const basePath = '/../../../../public/uploads'
 
-  const subFolder = product.isManufactured 
-    ? 'manufactured_products' 
+  const subFolder = product.isManufactured
+    ? 'manufactured_products'
     : 'products';
 
-  const imageUrl = product.imageUrl 
-    ? `${basePath}/${subFolder}/${product.imageUrl}`
+  const imageUrl = product.imageUrl
+    ? `${product.imageUrl}`
     : 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
 
   return (
     <CCard className="cui-product-card">
-      {
-        product.imageUrl !== "" ? (<CCardImage orientation="top" src={`${imageUrl}`} />)
-          : <CCardImage orientation="top" src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500" />
-      }
-
+      <CCardImage orientation="top" src={`${imageUrl}`} />
       <CCardBody>
         <CCardTitle className="cui-product-card-body-tittle" style={{ marginLeft: "-.1rem", fontSize: "1.3rem" }}>
           {product.denomination}
