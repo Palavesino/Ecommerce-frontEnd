@@ -1,8 +1,9 @@
 
 export const useGetItems = () => {
+    const baseURL = import.meta.env.VITE_BACK_DOMAIN;
     const getItems = async () => {
         try {
-            const response = await fetch(`/api/product`, {
+            const response = await fetch(`${baseURL}/api/product`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
