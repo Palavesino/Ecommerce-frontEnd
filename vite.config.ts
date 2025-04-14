@@ -7,15 +7,6 @@ export default defineConfig(({ mode }) => {
   
 
   return {
-    server: {
-      proxy: {
-        "/api": {
-          target: env.VITE_URL_DOMAIN, // Usa la variable aquí
-          changeOrigin: true,
-          secure: false,
-        }
-      }
-    },
     plugins: [react()],
     build: {
       sourcemap: false,
