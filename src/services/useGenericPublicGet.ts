@@ -6,6 +6,7 @@ export const useGenericPublicGet = <T>(
   refetch?: boolean
 ) => {
   const [data, setData] = useState<T[]>([]);
+  const baseURL = import.meta.env.VITE_BACK_DOMAIN;
 
   useEffect(() => {
     fetchData();
@@ -13,7 +14,7 @@ export const useGenericPublicGet = <T>(
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`${endpoint}`, {
+      const response = await fetch(`${baseURL}${endpoint}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
