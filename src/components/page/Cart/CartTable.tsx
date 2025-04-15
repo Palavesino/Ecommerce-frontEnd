@@ -1,10 +1,10 @@
 import { Table, Image, Button } from "react-bootstrap"
-import "./cartTable.css";
-import Counter from "./Counter";
 import { RxCross2 } from "react-icons/rx";
 import { useCart } from "../../../context/CartContext";
 import { BsCartXFill, BsCartCheckFill } from "react-icons/bs";
 import { useState } from "react";
+import Counter from "./Counter";
+import "./CartTable.css"
 
 const CartTable = () => {
     const { cart, removeFromCart, clearCart } = useCart();
