@@ -9,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Router from "./route/Route";
 import NavBar from "./components/common/nav-bar/NavBar";
 import Footer from "./components/common/footer/Footer";
+import { SpinnerProvider } from "./context/SpinnerContext";
+import SpinnerLoading from "./components/spinner-loading/SpinnerLoading";
 
 function App() {
   // Renderizado del componente
@@ -16,19 +18,19 @@ function App() {
     <>
 
       <BrowserRouter>
-        {/* <SpinnerProvider> */}
+        <SpinnerProvider>
         {/* <CartProvider> */}
         <div className="root">
           <NavBar />
           <div className="main-container">
             <Router />
-            {/* <SpinnerLoading />  */}
+            <SpinnerLoading /> 
           </div>
           <Footer />
           <ToastContainer />
         </div>
         {/* </CartProvider> */}
-        {/* </SpinnerProvider> */}
+        </SpinnerProvider>
       </BrowserRouter>
     </>
   );

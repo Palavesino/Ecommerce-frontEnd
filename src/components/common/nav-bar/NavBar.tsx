@@ -1,8 +1,7 @@
 // Importacion de dependencias
 import { Link } from "react-router-dom";
-import { Navbar, Container, Nav, NavDropdown, Col, Row } from "react-bootstrap";
-import { BsCart3, BsPersonCircle } from "react-icons/bs";
-import { IoFastFoodOutline, IoSearch } from "react-icons/io5";
+import { Navbar, Container, Nav} from "react-bootstrap";
+import { BsCart3} from "react-icons/bs";
 
 
 
