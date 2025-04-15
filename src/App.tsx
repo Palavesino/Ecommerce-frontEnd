@@ -7,6 +7,8 @@ import { ToastContainer } from "react-toastify";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import Router from "./route/Route";
+import NavBar from "./components/common/nav-bar/NavBar";
+import Footer from "./components/common/footer/Footer";
 
 function App() {
   // Renderizado del componente
@@ -17,12 +19,12 @@ function App() {
         {/* <SpinnerProvider> */}
         {/* <CartProvider> */}
         <div className="root">
-          {/* <NavBar /> */}
+          <NavBar />
           <div className="main-container">
             <Router />
             {/* <SpinnerLoading />  */}
           </div>
-          {/* <Footer /> */}
+          <Footer />
           <ToastContainer />
         </div>
         {/* </CartProvider> */}
