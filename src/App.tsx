@@ -11,6 +11,7 @@ import NavBar from "./components/common/nav-bar/NavBar";
 import Footer from "./components/common/footer/Footer";
 import { SpinnerProvider } from "./context/SpinnerContext";
 import SpinnerLoading from "./components/spinner-loading/SpinnerLoading";
+import { CartProvider } from "./context/CartContext";
 
 function App() {
   // Renderizado del componente
@@ -19,7 +20,7 @@ function App() {
 
       <BrowserRouter>
         <SpinnerProvider>
-        {/* <CartProvider> */}
+        <CartProvider>
         <div className="root">
           <NavBar />
           <div className="main-container">
@@ -29,7 +30,7 @@ function App() {
           <Footer />
           <ToastContainer />
         </div>
-        {/* </CartProvider> */}
+        </CartProvider>
         </SpinnerProvider>
       </BrowserRouter>
     </>
