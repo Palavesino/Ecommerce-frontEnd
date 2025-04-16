@@ -3,10 +3,11 @@ import { Route } from "react-router-dom";
 
 // Importaciones de Assets
 import { lazy, Suspense } from "react";
+import Carrito from "../components/page/cart/cart.tsx";
 
 const Products = lazy(() => import('../components/product/Products.tsx'));
 const ProductDetails = lazy(() => import('../components/product/product-details/ProductDetails.tsx'));
-const Carrito = lazy(() => import('../components/page/cart/Cart.tsx'));
+//const Carrito = lazy(() => import('../components/page/cart/cart.tsx'));
 const RoutesWithNotFound = lazy(() => import('../util/routes-with-not-found.tsx'));
 
 
