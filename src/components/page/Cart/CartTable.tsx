@@ -11,7 +11,6 @@ const CartTable = () => {
     const { cart, removeFromCart, clearCart } = useCart();
     const total = cart.reduce((acc, item) => acc + item.subtotal, 0);
     const [showModal, setShowModal] = useState(false);
-    console.log(showModal)
     const handleClick = async () => {
         setShowModal(true);
     };
