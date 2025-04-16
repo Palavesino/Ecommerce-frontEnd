@@ -2,11 +2,12 @@ import { Route } from "react-router-dom";
 
 
 // Importaciones de Assets
-import { Suspense } from "react";
-import RoutesWithNotFound from "../util/routes-with-not-found";
-import Products from "../components/product/Products";
+import { lazy, Suspense } from "react";
 
-
+const Products = lazy(() => import('../components/product/Products'));
+const ProductDetails = lazy(() => import('../components/product/product-details/ProductDetails'));
+const CartTable = lazy(() => import('../components/page/Cart/CartTable'));
+const RoutesWithNotFound = lazy(() => import('../util/routes-with-not-found'));
 
 
 const Router = () => {
@@ -18,7 +19,11 @@ const Router = () => {
           <Route path="/" element={
                <Products />
            } />
-          
+           <Route
+            path="/productos/:productId"
+            element={<ProductDetails />}
+          />
+          <Route path="/carrito" element={ <CartTable/>}></Route>
         </RoutesWithNotFound>
       </Suspense>
     </>

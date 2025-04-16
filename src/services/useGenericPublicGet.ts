@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSpinner } from "../context/SpinnerContext";
 
 export const useGenericPublicGet = <T>(
   endpoint: string,
@@ -7,12 +8,13 @@ export const useGenericPublicGet = <T>(
 ) => {
   const [data, setData] = useState<T[]>([]);
   const baseURL = import.meta.env.VITE_BACK_DOMAIN;
-
+  const { showSpinner, hideSpinner } = useSpinner();
   useEffect(() => {
     fetchData();
   }, [refetch]);
 
   const fetchData = async () => {
+    showSpinner();
     try {
       const response = await fetch(`${baseURL}${endpoint}`, {
         method: "GET",
@@ -29,6 +31,8 @@ export const useGenericPublicGet = <T>(
       }
     } catch (e) {
       console.error(`Error fetching ${entidadMsj} data:`, e);
+    } finally {
+      hideSpinner();
     }
   };
 
