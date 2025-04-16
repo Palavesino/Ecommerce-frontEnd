@@ -1,0 +1,19 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "src/main.tsx",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "dist",
+          "cleanDistDir": true
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/.*",
+        "dest": "/index.html"
+      }
+    ]
+  }

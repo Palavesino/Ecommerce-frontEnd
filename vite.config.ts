@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     build: {
       sourcemap: false,
+      outDir: "dist",
     },
     esbuild: {
       sourcemap: false,
