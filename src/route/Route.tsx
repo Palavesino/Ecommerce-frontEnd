@@ -6,7 +6,7 @@ import { lazy, Suspense } from "react";
 
 const Products = lazy(() => import('../components/product/Products'));
 const ProductDetails = lazy(() => import('../components/product/product-details/ProductDetails'));
-const Carrito = lazy(() => import('@/components/page/cart/Cart'));
+const CartTable = lazy(() => import('../components/page/cart/CartTable'));
 const RoutesWithNotFound = lazy(() => import('../util/routes-with-not-found'));
 
 
@@ -23,7 +23,7 @@ const Router = () => {
             path="/productos/:productId"
             element={<ProductDetails />}
           />
-          <Route path="/carrito" element={<Carrito />}></Route>
+          <Route path="/carrito" element={ <CartTable/>}></Route>
         </RoutesWithNotFound>
       </Suspense>
     </>
