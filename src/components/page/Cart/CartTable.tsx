@@ -44,7 +44,7 @@ const CartTable = () => {
                                 />
                             </th>
                             <th className="price">
-                                {`${product.item.price.sellPrice}`}
+                                {`$${product.item.price.sellPrice}`}
                             </th>
                             <th className="remove">
                                 <button
