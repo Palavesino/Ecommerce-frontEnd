@@ -6,7 +6,7 @@ import { lazy, Suspense } from "react";
 
 const Products = lazy(() => import('../components/product/Products'));
 const ProductDetails = lazy(() => import('../components/product/product-details/ProductDetails'));
-const CartTable = lazy(() => import('../components/page/cart/CartTable'));
+const CartTable = lazy(() => import('../components/page/Cart/CartTable'));
 const RoutesWithNotFound = lazy(() => import('../util/routes-with-not-found'));
 
 
