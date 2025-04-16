@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-//import Carrito from "../components/page/cart/Cart.tsx";
+import Carrito from "../components/page/cart/Cart.tsx";
 
 
 // Importaciones de Assets
@@ -24,7 +24,7 @@ const Router = () => {
             path="/productos/:productId"
             element={<ProductDetails />}
           />
-          {/* <Route path="/carrito" element={<Carrito />}></Route> */}
+          <Route path="/carrito" element={<Carrito />}></Route>
         </RoutesWithNotFound>
       </Suspense>
     </>

@@ -5,12 +5,13 @@ import { BsCartXFill, BsCartCheckFill } from "react-icons/bs";
 import { useState } from "react";
 import Counter from "./Counter";
 import "./CartTable.css"
-import OrderForm from "../../order/OrderForm";
+// import OrderForm from "../../order/OrderForm";
 
 const CartTable = () => {
     const { cart, removeFromCart, clearCart } = useCart();
     const total = cart.reduce((acc, item) => acc + item.subtotal, 0);
     const [showModal, setShowModal] = useState(false);
+    console.log(showModal)
     const handleClick = async () => {
         setShowModal(true);
     };
@@ -84,9 +85,9 @@ const CartTable = () => {
                 </div>
             )}
             
-            {showModal && (
+            {/* {showModal && (
                 <OrderForm show={showModal} setShowModal={setShowModal} />
-            )}
+            )} */}
         </>
     );
 }
