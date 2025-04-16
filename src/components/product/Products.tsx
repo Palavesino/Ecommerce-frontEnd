@@ -41,7 +41,6 @@ const Products = () => {
       setCategorys(data);
     }
   }, [data]);
-  console.log(selectedCategory)
   const filteredProducts = selectedCategory ?
     items.filter((item) => item.categoryId === selectedCategory)
     : items;
