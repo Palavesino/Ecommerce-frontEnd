@@ -2,7 +2,7 @@
 import { useParams } from "react-router-dom";
 
 // Importaciones de componenetes, funciones y modelos
-import ProductDetailsCard from "./ProductDetailsCard/ProductDetailsCard";
+import ProductDetailsCard from "./product-details-card/ProductDetailsCard";
 
 // Importaciones de estilos
 import "./ProductDetails.css";

@@ -40,7 +40,6 @@ export const cartReducer = (state: OrderDetail[], action: CountActionProps): Ord
                 ] : [
                     ...state,
                     {
-                        id: '0',
                         quantity: 1,
                         subtotal: actionPayload.price.sellPrice,
                         ...{ item: actionPayload as Product}

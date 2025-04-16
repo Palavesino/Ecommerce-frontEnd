@@ -3,7 +3,7 @@ import { PaymentStatus } from "../enum/Paid";
 import { OrderDetail } from "./OrderDetails";
 
 export interface Order {
-    id: string
+    id?: string
     address: string;
     apartment: string;
     discount: number;
@@ -13,9 +13,6 @@ export interface Order {
     isCanceled: boolean;
     phone: string;
     total: number;
-    userId: number;
-    userName: string;
-    userLastName: string;
     deliveryMethod: string;
     paymentType: string;
     dateTime: string | Date| null;  

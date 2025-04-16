@@ -1,7 +1,7 @@
 import { Product } from "./Product";
 
 export interface OrderDetail {
-    id: string;
+    id?: string;
     quantity: number;
     subtotal: number;
     item: Product;
