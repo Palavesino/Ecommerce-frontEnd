@@ -5,7 +5,6 @@ import { BsCartXFill, BsCartCheckFill } from "react-icons/bs";
 import { useState } from "react";
 import Counter from "./Counter";
 import "./CartTable.css"
-// import OrderForm from "../../order/OrderForm";
 
 const CartTable = () => {
     const { cart, removeFromCart, clearCart } = useCart();
@@ -13,6 +12,7 @@ const CartTable = () => {
     const [showModal, setShowModal] = useState(false);
     console.log(showModal)
     const handleClick = async () => {
+        console.log(JSON.stringify(cart,null,2))
         setShowModal(true);
     };
 
@@ -44,7 +44,7 @@ const CartTable = () => {
                                 />
                             </th>
                             <th className="price">
-                                {`$${product.item.price.sellPrice}`}
+                                {`${product.item.price.sellPrice}`}
                             </th>
                             <th className="remove">
                                 <button
@@ -84,8 +84,8 @@ const CartTable = () => {
                     </Button>
                 </div>
             )}
-            
-            {/* {showModal && (
+            {/* 
+            {showModal && (
                 <OrderForm show={showModal} setShowModal={setShowModal} />
             )} */}
         </>
