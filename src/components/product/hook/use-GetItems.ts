@@ -6,7 +6,7 @@ export const useGetItems = () => {
     const getItems = async () => {
         showSpinner();
         try {
-            const response = await fetch(`${baseURL}/api/product`, {
+            const response = await fetch(`${baseURL}/api/product/main`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
