@@ -1,6 +1,5 @@
 .cui-product-card {
   max-width: 16rem;
-  height: 20rem;
   margin: 0.5rem;
   background-color: transparent;
   border-radius: 1rem;
@@ -10,21 +9,45 @@
 
 .cui-product-card img {
   border-radius: 1rem;
-  width: 100%; /* Ancho fijo */
-  height: 200px; /* Altura fija */
+  width: 100%;
+  /* Ancho fijo */
+  height: 200px;
+  /* Altura fija */
   object-fit: cover;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
+.cui-product-card-body {
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  background-image: url("../../../assets/madera-gris.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .cui-product-card-body-tittle {
   margin-top: 0.5rem;
+  font-family: 'Playfair Display', serif; /* o 'Montserrat', sans-serif */
+  font-size: 1.3rem;
+  color: #ffffff;
+  text-align: center;
 }
 
 .cui-product-card-body-button {
+  text-decoration: none;
   margin-top: 1rem;
-  box-shadow: rgba(255, 201, 0, 0.4) 11px 20px 9px -20px inset;
-  border-radius: 2rem;
+  background: linear-gradient(145deg, #1a1a1a, #000); /* negro elegante */
+  border: 2px solid #fdfcfcdc; /* borde blanco */
+  border-radius: 1.5rem; /* más chico */
+  padding: 0.4rem 1.2rem; /* achicado */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem; /* letra más chica */
+  font-weight: 600; /* semi-bold, no tan grueso */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.4); /* glow blanco más sutil */
 }
 
 .cui-product-card-body-button-text {

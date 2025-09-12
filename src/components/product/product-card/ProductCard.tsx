@@ -33,15 +33,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <CCard className="cui-product-card">
       <CCardImage orientation="top" src={`${imageUrl}`} />
-      <CCardBody>
-        <CCardTitle className="cui-product-card-body-tittle" style={{ marginLeft: "-.1rem", fontSize: "1.3rem" }}>
+      <CCardBody className="cui-product-card-body">
+        <CCardTitle className="cui-product-card-body-tittle">
           {product.denomination}
         </CCardTitle>
-        <CButton className="cui-product-card-body-button" style={{ backgroundColor: "rgb(17, 17, 17)", borderColor: "rgb(246, 189, 90)" }}>
+        <CButton className="cui-product-card-body-button">
           <Link
             to={`/productos/${product.id}`}
             className="cui-product-card-body-button-text"
-            style={{ color: "rgb(246, 189, 90)" }}
           >
             Detalles del producto
           </Link>
