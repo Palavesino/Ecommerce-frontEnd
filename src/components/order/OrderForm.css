@@ -445,3 +445,44 @@
     margin-top: auto;
   }
 }
+@media (max-width: 540px) {
+  .order-modal {
+    max-height: 95vh;
+    border-radius: 12px 12px 0 0;
+    align-self: flex-end;
+  }
+
+  .order-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .order-radio-group {
+    gap: 0.4rem;
+  }
+
+  .order-delivery-fields {
+    padding: 0 1rem 1rem;
+  }
+
+  .order-section {
+    padding: 0.75rem 1rem;
+  }
+
+  .order-items {
+    padding: 0.75rem 1rem;
+  }
+
+  .order-header {
+    padding: 1.25rem 1rem 0.75rem;
+  }
+
+  .order-confirm-btn {
+    width: calc(100% - 2rem);
+    margin: 0.5rem 1rem 1.25rem;
+  }
+
+  .order-totals {
+    padding: 0.75rem 1rem;
+  }
+}

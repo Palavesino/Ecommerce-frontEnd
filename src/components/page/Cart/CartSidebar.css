@@ -309,3 +309,8 @@
   border-color: #C9953A;
   color: #C9953A;
 }
+@media (max-width: 480px) {
+  .cart-sidebar {
+    width: 100vw;
+  }
+}

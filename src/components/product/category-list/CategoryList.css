@@ -115,3 +115,45 @@
 .filter-item:hover {
   color: #1A1209;
 }
+
+@media (max-width: 768px) {
+  .category-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .category-list-title {
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+
+  .cat-group {
+    margin-bottom: 0;
+  }
+
+  .cat-parent {
+    padding: 0.4rem 0.65rem;
+    font-size: 12px;
+    border: 1px solid rgba(201, 149, 58, 0.25);
+    border-radius: 20px;
+  }
+
+  .cat-children {
+    position: absolute;
+    background: #FFFDF8;
+    border: 1px solid rgba(201, 149, 58, 0.25);
+    border-radius: 6px;
+    padding: 0.5rem;
+    z-index: 50;
+    margin-left: 0;
+    box-shadow: 0 4px 16px rgba(26, 18, 9, 0.1);
+    min-width: 140px;
+  }
+
+  .cat-divider,
+  .filter-list {
+    display: none;
+  }
+}

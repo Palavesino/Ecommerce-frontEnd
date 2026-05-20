@@ -178,3 +178,33 @@
   color: #fff;
   pointer-events: none;
 }
+
+@media (max-width: 480px) {
+  .card-img-wrap {
+    height: 140px;
+  }
+
+  .cui-product-card-body {
+    padding: 0.7rem 0.75rem 0.9rem;
+  }
+
+  .cui-product-card-body-tittle {
+    font-size: 0.9rem;
+  }
+
+  .card-price {
+    font-size: 12px;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-actions {
+    gap: 0.35rem;
+  }
+
+  .btn-add-cart-card,
+  .btn-detail-card {
+    font-size: 9px;
+    padding: 0.4rem 0.3rem;
+    letter-spacing: 0.8px;
+  }
+}
