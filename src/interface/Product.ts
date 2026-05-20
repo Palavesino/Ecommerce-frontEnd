@@ -1,4 +1,3 @@
-import { Price } from "./Price";
 
 export interface Product {
     id: string;
@@ -9,5 +8,5 @@ export interface Product {
     cookingTime: string | null;
     isManufactured: boolean;
     categoryId: string;
-    price: Price;
+    sellPrice: number; 
 }

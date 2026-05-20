@@ -1,9 +1,4 @@
-// Importaciones de dependencias
 import { useEffect, useState } from "react";
-
-// Importaciones de componenetes, funciones y modelos
-
-// Importaciones de estilos
 import "./Products.css";
 import ProductCard from "./product-card/ProductCard";
 import { Product } from "../../interface/Product";
@@ -12,56 +7,59 @@ import { useGenericPublicGet } from "../../services/useGenericPublicGet";
 import { Category } from "../../interface/Category";
 import CategoryList from "./category-list/CategoryList";
 
-/*
- * Componente de productos
- * El componente muestra una página de productos con tarjetas de productos.
- * Utiliza el componente `CategoryList` para mostrar una lista de categorías de productos.
- * Cada producto se muestra en una tarjeta (`CCard`) con una imagen, título y un botón.
- */
 const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [categories, setCategorys] = useState<Category[]>([]);
-  const data = useGenericPublicGet<Category>(
-    "/api/category/catalogue",
-    "Categorías Product",
-
-  );
+  const [categories, setCategories] = useState<Category[]>([]);
   const [items, setItems] = useState<Product[]>([]);
   const getItems = useGetItems();
+
+  const data = useGenericPublicGet<Category>(
+    "/api/category/catalogue",
+    "Categorías Product"
+  );
 
   useEffect(() => {
     async function getProducts() {
       const fetchedItems = await getItems();
-      if (fetchedItems) {
-        setItems(fetchedItems);
-      }
+      if (fetchedItems) setItems(fetchedItems);
     }
     if (data && data.length > 0) {
       getProducts();
-      setCategorys(data);
+      setCategories(data);
     }
   }, [data]);
-  const filteredProducts = selectedCategory ?
-    items.filter((item) => item.categoryId === selectedCategory)
+
+  const filteredProducts = selectedCategory
+    ? items.filter((item) => item.categoryId === selectedCategory)
     : items;
 
-  const handleCategoryClick = (categoryId: string) => {
-    setSelectedCategory(categoryId);
-  };
+  // Nombre de la categoría seleccionada para el título
+  const selectedCategoryName = selectedCategory
+    ? categories.find((c) => c.id === selectedCategory)?.denomination ?? "Productos"
+    : "Todos los productos";
 
   return (
     <div className="products-page">
+      {/* Sidebar de categorías */}
       <div className="categories-container">
         <CategoryList
           categories={categories}
-          onCategoryClick={handleCategoryClick}
+          onCategoryClick={(id) => setSelectedCategory(id)}
         />
       </div>
-      <div className="products-container">
-        {filteredProducts && filteredProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
 
+      {/* Área de productos */}
+      <div className="products-area">
+        <div className="section-header">
+          <h1 className="section-title">{selectedCategoryName}</h1>
+          <span className="section-count">{filteredProducts.length} productos</span>
+        </div>
+
+        <div className="products-container">
+          {filteredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
       </div>
     </div>
   );

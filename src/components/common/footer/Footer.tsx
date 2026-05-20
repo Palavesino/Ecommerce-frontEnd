@@ -1,56 +1,73 @@
-// Importacion de dependencias
-import { Container, Row, Col } from "react-bootstrap";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
+import "./Footer.css";
 
-// Importacion de estilos
-import "./Footer.css"
-
-/*
- * Componente de pie de página.
- * El componente muestra información de contacto, enlaces a redes sociales y créditos de derechos de autor y desarrollador.
- */
 const Footer = () => {
-  // Renderizado del componente
   return (
-    <footer>
-      <Container fluid className="container-footer">
-        <Row>
-          <Col className="social-icons-col">
-            <div className="circle-icon-container">
-              <FaFacebookF className="icon-footer-fb" />
-            </div>
-            <div className="circle-icon-container">
-              <FaTwitter className="icon-footer-tw" />
-            </div>
-            <div className="circle-icon-container">
-              <FaInstagram className="icon-footer-ig" />
-            </div>
-          </Col>
+    <footer className="site-footer">
+      <div className="footer-inner">
 
-          <Col className="logo-col">
-            <div className="logo-footer"></div>
-          </Col>
+        {/* Fila principal */}
+        <div className="footer-main">
 
-          <Col className="info-col">
-            <p>
-              <a href="#">Contacto</a>
-            </p>
-            <p>
-              <a href="#">Sobre Nosotros</a>
-            </p>
-          </Col>
-        </Row>
-        
-        <Row className="second-row">
-          <Col className="copy-col" md={4}>
-            <p>©2023 elbuensabor restaurante All Rights reserved.</p>
-          </Col>
+          {/* Logo + descripción */}
+          <div className="footer-brand">
+            <div className="footer-logo-box">
+              <span className="footer-logo-initials">BS</span>
+            </div>
+            <div className="footer-brand-text">
+              <span className="footer-brand-sub">Restaurante</span>
+              <span className="footer-brand-name">El Buen Sabor</span>
+            </div>
+          </div>
 
-          <Col className="developer-col" md={5}>
-            <p>Powered by Power Rangers</p>
-          </Col>
-        </Row>
-      </Container>
+          {/* Links */}
+          <div className="footer-links">
+            <p className="footer-links-title">Menú</p>
+            <a href="/">Inicio</a>
+            <a href="/">Platos principales</a>
+            <a href="/">Bebidas</a>
+            <a href="/">Postres</a>
+          </div>
+
+          <div className="footer-links">
+            <p className="footer-links-title">Información</p>
+            <a href="#">Sobre nosotros</a>
+            <a href="#">Contacto</a>
+            <a href="#">Términos y condiciones</a>
+          </div>
+
+          {/* Redes */}
+          <div className="footer-social">
+            <p className="footer-links-title">Seguinos</p>
+            <div className="footer-social-icons">
+              <a href="#" className="footer-icon-btn" aria-label="Facebook">
+                <FaFacebookF />
+              </a>
+              <a href="#" className="footer-icon-btn" aria-label="Twitter">
+                <FaTwitter />
+              </a>
+              <a href="#" className="footer-icon-btn" aria-label="Instagram">
+                <FaInstagram />
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Divider */}
+        <div className="footer-divider" />
+
+        {/* Fila inferior */}
+        <div className="footer-bottom">
+          <p className="footer-copy">
+            © 2025 El Buen Sabor · Todos los derechos reservados
+          </p>
+          <p className="footer-dev">
+            Desarrollado por <span>Power Rangers</span>
+          </p>
+        </div>
+
+      </div>
     </footer>
   );
 };

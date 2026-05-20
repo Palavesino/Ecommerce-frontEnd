@@ -1,54 +1,29 @@
-// Importaciones de dependencias
-import { useParams } from "react-router-dom";
-
-// Importaciones de componenetes, funciones y modelos
+import { useLocation, useNavigate } from "react-router-dom";
 import ProductDetailsCard from "./product-details-card/ProductDetailsCard";
-
-// Importaciones de estilos
 import "./ProductDetails.css";
-import { useEffect, useState } from "react";
 import { Product } from "../../../interface/Product";
-import { useGenericPublicGetXID } from "../../../services/useGenericPublicGetXID";
 
-/**
- * Propiedades del componente ProductDetails. (temporales ya que hay que hay que desarrollar query para los productos relacionados)
- * @prop {Product[]} products - Un array de objetos Product para mostrar el carrusel de productos relacionados.
- */
-
-// explicacion del componente
 const ProductDetails = () => {
-  const { productId } = useParams<{ productId: string }>();
-  // Estado para almacenar las manufactured-products
-  const [item, setItem] = useState<Product | null>();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const data = ( productId) ? useGenericPublicGetXID<Product>(
-    `/api/price/p`,
-    productId, true
-  ) : null;
+  const product = location.state?.product as Product | undefined;
 
-
-  useEffect(() => {
-    if (data) {
-      setItem(data);
-    }
-  }, [data]);
-
-  if (!productId) {
-    return <div>No se encontró el producto</div>;
+  if (!product) {
+    return (
+      <div className="product-not-found">
+        <p>No se encontró el producto.</p>
+        <button className="btn-back" onClick={() => navigate("/")}>
+          ← Volver al inicio
+        </button>
+      </div>
+    );
   }
 
-
-
-  // Renderizado del componente
   return (
-    <>
-      {(item !== null && item !== undefined) && (
-
-        <div className="product-details-page">
-          <ProductDetailsCard product={item}  />
-        </div>
-      )}
-    </>
+    <div className="product-details-page">
+      <ProductDetailsCard product={product} />
+    </div>
   );
 };
 

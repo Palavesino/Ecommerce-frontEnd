@@ -1,77 +1,178 @@
-footer {
+.site-footer {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #1A1209 0%, #2E2415 60%, #3D2B0A 100%);
+  border-top: 2px solid rgba(201, 149, 58, 0.25);
+  font-family: 'Jost', sans-serif;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2.5rem 1.5rem;
+}
+
+/* Fila principal */
+.footer-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+/* Brand */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   flex-shrink: 0;
 }
 
-.container-footer {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    linear-gradient(to right, #f6bd5a 0%, #000 75%);
-    
-  position: sticky;
-  width: 100%;
-  height: auto;
-}
-
-.social-icons-col {
+.footer-logo-box {
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid #C9953A;
+  border-radius: 3px;
   display: flex;
-  margin-left: 5rem;
-  margin-right: 4rem;
-}
-
-.circle-icon-container {
-  width: 1.8rem;
-  height: 1.8rem;
-  margin-top: 1.5rem;
-  margin-right: .5rem;
-  border-radius: 50%;
-  background-color: black;
-}
-
-.icon-footer-fb, 
-.icon-footer-tw,
-.icon-footer-ig {
-  font-size: 1.2rem;
-  top: 0px;
-  margin-left: .34rem;
-  color: white;
-}
-
-.logo-footer {
-  margin-top: 1rem;
-  width: 7.5rem;
-  height: 5rem;
-  background: url("/src/assets/logos/logo.png");
-  background-position: center center;
-  background-size: cover;
-}
-
-.logo-col {
-  margin-left: 15%;
-}
-
-.info-col {
-  padding: 1.5rem;
-  margin-right: 6rem;
-  display: flex;
-  justify-content: right;
-}
-
-.info-col a {
-  color: #f6bd5a;
-  margin-left: 2.5rem;
-}
-
-.second-row {
-  margin-top: .8rem;
   align-items: center;
-  text-align: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.copy-col {
-  color: black;
-  font-size: .75rem;
+.footer-logo-initials {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #C9953A;
+  letter-spacing: 1px;
 }
 
-.developer-col {
-  color: #f6bd5a;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+.footer-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.footer-brand-sub {
+  font-size: 10px;
+  color: #E8C97A;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.footer-brand-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* Links */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.footer-links-title {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #C9953A;
+  margin: 0 0 0.25rem;
+  font-weight: 400;
+}
+
+.footer-links a {
+  font-size: 13px;
+  color: #8A7A62;
+  text-decoration: none;
+  transition: color 0.2s;
+  letter-spacing: 0.3px;
+}
+
+.footer-links a:hover {
+  color: #E8C97A;
+}
+
+/* Redes sociales */
+.footer-social {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-social-icons {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.footer-icon-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(201, 149, 58, 0.25);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8A7A62;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.footer-icon-btn:hover {
+  border-color: #C9953A;
+  color: #C9953A;
+  background: rgba(201, 149, 58, 0.08);
+}
+
+/* Divider */
+.footer-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 149, 58, 0.25), transparent);
+  margin: 2rem 0 1.25rem;
+}
+
+/* Fila inferior */
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.footer-copy {
+  font-size: 11px;
+  color: #5A4E3A;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.footer-dev {
+  font-size: 11px;
+  color: #5A4E3A;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.footer-dev span {
+  color: #C9953A;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .footer-main {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
 }

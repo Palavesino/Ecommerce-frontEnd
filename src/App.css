@@ -6,7 +6,7 @@
 }
 
 .main-container {
-  min-height: calc(100vh - (13rem));
+  min-height: calc(100vh - 13rem);
   display: flex;
   flex-direction: column;
 }

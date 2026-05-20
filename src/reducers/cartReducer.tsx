@@ -34,14 +34,14 @@ export const cartReducer = (state: OrderDetail[], action: CountActionProps): Ord
                     {
                         ...state[productInCartIndex],
                         quantity: state[productInCartIndex].quantity + 1,
-                        subtotal: (state[productInCartIndex].quantity + 1) * actionPayload.price.sellPrice
+                        subtotal: (state[productInCartIndex].quantity + 1) * actionPayload.sellPrice
                     },
                     ...state.slice(productInCartIndex + 1)
                 ] : [
                     ...state,
                     {
                         quantity: 1,
-                        subtotal: actionPayload.price.sellPrice,
+                        subtotal: actionPayload.sellPrice,
                         ...{ item: actionPayload as Product}
                     }
                 ];
@@ -59,7 +59,7 @@ export const cartReducer = (state: OrderDetail[], action: CountActionProps): Ord
                             ...state.slice(0, productInCartIndex),
                             {
                                 ...state[productInCartIndex], quantity: state[productInCartIndex].quantity - 1,
-                                subtotal: (state[productInCartIndex].quantity - 1) * actionPayload.price.sellPrice
+                                subtotal: (state[productInCartIndex].quantity - 1) * actionPayload.sellPrice
                             },
                             ...state.slice(productInCartIndex + 1)
                         ]

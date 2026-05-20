@@ -1,33 +1,117 @@
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-family: 'Jost', sans-serif;
+}
 
-  
-  .dropdown-item {
-    margin-bottom: 10px;
-  }
-  
-  .category-label {
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  .category-label:hover {
-    text-decoration: underline;
-  }
-  
-  .submenu {
-    margin-left: 20px;
-    margin-top: 5px;
-  }
-  
-  .submenu-item {
-    margin-bottom: 5px;
-  }
-  
-  .subcategory-label {
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .subcategory-label:hover {
-    text-decoration: underline;
-  }
+.category-list-title {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #C9953A;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.cat-group {
+  margin-bottom: 0.1rem;
+}
+
+.cat-parent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #2E2415;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.cat-parent:hover,
+.cat-parent.open {
+  background: #F6EDD4;
+  border-color: rgba(201, 149, 58, 0.2);
+  color: #1A1209;
+}
+
+.cat-chevron {
+  font-size: 9px;
+  color: #C9953A;
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.cat-chevron.rotated {
+  transform: rotate(90deg);
+}
+
+.cat-children {
+  margin-top: 0.2rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid rgba(201, 149, 58, 0.25);
+  margin-left: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.cat-child {
+  padding: 0.35rem 0.6rem;
+  font-size: 12px;
+  color: #8A7A62;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s;
+  font-weight: 400;
+  position: relative;
+}
+
+.cat-child::before {
+  content: '— ';
+  color: #C9953A;
+  font-size: 10px;
+}
+
+.cat-child:hover {
+  color: #1A1209;
+  background: #F6EDD4;
+}
+
+.cat-child.active {
+  color: #C9953A;
+  font-weight: 500;
+}
+
+.cat-divider {
+  width: 30px;
+  height: 1px;
+  background: #C9953A;
+  opacity: 0.35;
+  margin: 1.25rem 0;
+}
+
+.filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.filter-item {
+  font-size: 12px;
+  color: #8A7A62;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: color 0.2s;
+}
+
+.filter-item:hover {
+  color: #1A1209;
+}

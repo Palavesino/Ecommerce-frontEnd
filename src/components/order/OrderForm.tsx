@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Button, Form, Modal, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
+import { RxCross2 } from "react-icons/rx";
+import { BsCheckCircle } from "react-icons/bs";
 import "./OrderForm.css";
 import { useCart } from "../../context/CartContext";
 import { useOrderSave } from "./hook/use-SaveOrder";
@@ -8,312 +9,280 @@ import { Order } from "../../interface/Order";
 import { PaymentStatus } from "../../enum/Paid";
 import { OrderStatus } from "../../enum/OrderStatus";
 
-
-
 interface OrderFormProps {
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-    show: boolean;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  show: boolean;
 }
-
 
 const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
-    const { cart, clearCart } = useCart();
-    const [idPreference, setIdPreference] = useState<string | null>(null);
-    const [isDelivery, setIsDelivery] = useState(false);
-    const orderPost = useOrderSave(); // Hook personalizado para realizar una petición POST genérica a la API
-    const subtotal = cart.reduce((acc, item) => acc + item.subtotal, 0);
-    const discount = (!isDelivery ? parseFloat((subtotal * 0.1).toFixed(2)) : 0);
+  const { cart, clearCart } = useCart();
+  const [idPreference, setIdPreference] = useState<string | null>(null);
+  const [isDelivery, setIsDelivery] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
+  const orderPost = useOrderSave();
 
-    //console.log(userComplete);
-    const totalCookingTime = cart.reduce((acc, i) => {
-        if (i.item.cookingTime) {
-            // Descomponer el tiempo en horas, minutos y segundos
-            const [hours, minutes, seconds] = i.item.cookingTime.split(':').map(Number);
-            // Sumar los tiempos
-            acc += hours * 3600 + minutes * 60 + seconds;
-        }
-        return acc;
-    }, 0);
-    // Suponiendo que totalCookingTime es el tiempo total en segundos
+  const subtotal = cart.reduce((acc, item) => acc + item.subtotal, 0);
+  const discount = !isDelivery ? parseFloat((subtotal * 0.1).toFixed(2)) : 0;
+  const total = subtotal - discount;
 
-    // Convertir el tiempo total de segundos a horas, minutos y segundos
-    const totalHours = Math.floor(totalCookingTime / 3600);
-    const totalMinutes = Math.floor((totalCookingTime % 3600) / 60);
-    const totalSeconds = totalCookingTime % 60;
+  const totalCookingTime = cart.reduce((acc, i) => {
+    if (i.item.cookingTime) {
+      const [hours, minutes, seconds] = i.item.cookingTime.split(":").map(Number);
+      acc += hours * 3600 + minutes * 60 + seconds;
+    }
+    return acc;
+  }, 0);
+  const totalHours = Math.floor(totalCookingTime / 3600);
+  const totalMinutes = Math.floor((totalCookingTime % 3600) / 60);
+  const totalSeconds = totalCookingTime % 60;
+  const totalTimeString = `${String(totalHours).padStart(2, "0")}:${String(totalMinutes).padStart(2, "0")}:${String(totalSeconds).padStart(2, "0")}`;
 
-    // Crear una cadena con el formato HH:MM:SS
-    const totalTimeString = `${totalHours.toString().padStart(2, '0')}:${totalMinutes.toString().padStart(2, '0')}:${totalSeconds.toString().padStart(2, '0')}`;
-
-    const handleSaveUpdate = async (o: Order) => {
-        if (o.paymentType !== "mp") {
-            setShowModal(false)
-        }
+  const handleSaveUpdate = async (o: Order) => {
+    if (o.paymentType !== "mp") {
+      setConfirmed(true);
+      setTimeout(() => {
         clearCart();
-        const response = await orderPost(o);
-        if (response) {
-            if (o.paymentType === "mp") {
-                setIdPreference(response.preferenceId);
-            }
-        }
-    };
+        setShowModal(false);
+        setConfirmed(false);
+      }, 2000);
+    }
+    clearCart();
+    const response = await orderPost(o);
+    if (response && o.paymentType === "mp") {
+      setIdPreference(response.preferenceId);
+    }
+  };
 
-    // Formik Password
-    const requestBody = {
-        phone: 0,
-        address: "",
-        apartment: "",
-        deliveryMethod: "",
-        paymentType: "",
+  const formik = useFormik({
+    initialValues: {
+      phone: 0,
+      address: "",
+      apartment: "",
+      deliveryMethod: "",
+      paymentType: "",
+    },
+    validateOnChange: true,
+    validateOnBlur: true,
+    onSubmit: async (values) => {
+      const order: Order = {
+        address: values.address,
+        apartment: values.apartment,
+        discount,
+        estimatedTime: totalTimeString,
+        paid: values.paymentType !== "mp" ? PaymentStatus.APPROVED : PaymentStatus.IN_PROCESS,
+        state: OrderStatus.PENDING,
+        isCanceled: false,
+        phone: String(values.phone),
+        total,
+        deliveryMethod: values.deliveryMethod,
+        orderDetails: cart,
+        paymentType: values.paymentType,
+        dateTime: new Date(),
+      };
+      handleSaveUpdate(order);
+    },
+  });
 
-    };
-    const formik = useFormik({
-        initialValues: requestBody,
-        // validationSchema: validationSchemaOrder(isDelivery),
-        validateOnChange: true,
-        validateOnBlur: true,
-        onSubmit: async (values: typeof requestBody) => {
-            const order: Order = {
-                address: values.address,
-                apartment: values.apartment,
-                discount: discount,
-                estimatedTime: totalTimeString,
-                paid: values.paymentType !== 'mp' ? PaymentStatus.APPROVED : PaymentStatus.IN_PROCESS,
-                state: OrderStatus.PENDING,
-                isCanceled: false,
-                phone: String(values.phone),
-                total: subtotal - discount,
-                deliveryMethod: values.deliveryMethod,
-                orderDetails: cart,
-                paymentType: values.paymentType,
-                dateTime: new Date(),
-            }
-           // console.log(JSON.stringify(order, null, 2))
-            handleSaveUpdate(order);
+  if (!show) return null;
 
-        },
+  return (
+    <div className="order-overlay" onClick={() => setShowModal(false)}>
+      <div className="order-modal" onClick={(e) => e.stopPropagation()}>
 
-    });
-    return (
-        <>
-            <Modal show={show} className="modal-order modal-lg modal-form" centered backdrop="static" onHide={() => setShowModal(false)}>
-                <Modal.Body>
-                    {!idPreference ? (
-                        <>
-                            <Button className="button-closeModal" onClick={() => setShowModal(false)}>
-                                <span aria-hidden="true">&times;</span>
-                            </Button>
+        {/* Header */}
+        <div className="order-header">
+          <div>
+            <p className="order-label">Confirmar pedido</p>
+            <p className="order-sub">{cart.length} productos · ${subtotal.toLocaleString("es-AR")}</p>
+          </div>
+          <button className="order-close" onClick={() => setShowModal(false)} aria-label="Cerrar">
+            <RxCross2 />
+          </button>
+        </div>
 
-                            {/* Mostrar formulario solo si no hay preferenceId */}
-                            <Form onSubmit={formik.handleSubmit}>
-                                <Form.Group>
-                                    <Row>
-                                        <Col>
-                                            <Form.Label className="col-label">Retiro</Form.Label>
-                                        </Col>
-                                        <Col>
-                                            <Form.Check
-                                                type="radio"
-                                                label="Delivery"
-                                                name="deliveryMethod"
-                                                id="delivery"
-                                                value="delivery"
-                                                onChange={(event) => {
-                                                    const input = event.target as HTMLInputElement;
-                                                    formik.setFieldValue("deliveryMethod", input.value);
-                                                    formik.setFieldValue("paymentType", "");
-                                                    setIsDelivery(true);
-                                                }}
-                                                className="radio-button"
-                                                isInvalid={Boolean(formik.errors.deliveryMethod && formik.touched.deliveryMethod)}
-                                            />
-                                        </Col>
-                                        <Col>
-                                            <Form.Check
-                                                type="radio"
-                                                label="Local"
-                                                name="deliveryMethod"
-                                                id="local"
-                                                value="local"
-                                                onChange={(event) => {
-                                                    const input = event.target as HTMLInputElement;
-                                                    formik.setFieldValue("deliveryMethod", input.value);
-                                                    formik.setFieldValue("paymentType", "");
-                                                    setIsDelivery(false);
-                                                }}
-                                                className="radio-button"
-                                                isInvalid={Boolean(formik.errors.deliveryMethod && formik.touched.deliveryMethod)}
-                                            />
-                                        </Col>
-                                    </Row>
+        <div className="order-divider" />
 
-                                    <Form.Control.Feedback type="invalid">
-                                        {formik.errors.deliveryMethod}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+        {!idPreference ? (
+          <form onSubmit={formik.handleSubmit} className="order-form">
 
-                                {/* Mostrar campos específicos cuando se elige 'delivery' */}
-                                {formik.values.deliveryMethod === 'delivery' && (
-                                    <Row>
-                                        <Col className="phone">
-                                            <Form.Group controlId="formPhone">
-                                                <Form.Label>Teléfono</Form.Label>
-                                                <Form.Control
-                                                    placeholder="Teléfono"
-                                                    type="number"
-                                                    name="phone"
-                                                    onChange={formik.handleChange}
-                                                    value={formik.values.phone}
-                                                    isInvalid={Boolean(formik.errors.phone && formik.touched.phone)}
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    {formik.errors.phone}
-                                                </Form.Control.Feedback>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col className="address">
-                                            <Form.Group>
-                                                <Form.Label>Dirección</Form.Label>
-                                                <Form.Control
-                                                    placeholder="Dirección"
-                                                    type="text"
-                                                    name="address"
-                                                    onChange={formik.handleChange}
-                                                    value={formik.values.address}
-                                                    isInvalid={Boolean(formik.errors.address && formik.touched.address)}
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    {formik.errors.address}
-                                                </Form.Control.Feedback>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col className="apartment">
-                                            <Form.Group>
-                                                <Form.Label>Departamento</Form.Label>
-                                                <Form.Control
-                                                    placeholder="Departamento"
-                                                    type="text"
-                                                    name="apartment"
-                                                    onChange={formik.handleChange}
-                                                    value={formik.values.apartment}
-                                                    isInvalid={Boolean(formik.errors.apartment && formik.touched.apartment)}
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    {formik.errors.apartment}
-                                                </Form.Control.Feedback>
-                                            </Form.Group>
-                                        </Col>
-                                    </Row>
-                                )}
-
-                                {/* Mostrar forma de pago */}
-                                {formik.values.deliveryMethod !== '' && (
-                                    <Form.Group>
-                                        <Row className="row-typePay">
-                                            <Col className="col-label">
-                                                <Form.Label>Forma de pago</Form.Label>
-                                            </Col>
-                                            <Col >
-                                                <Form.Check
-                                                    className="radio-button-typePay"
-                                                    type="radio"
-                                                    label={
-                                                        <>
-                                                            Mercado Pago
-                                                            <span className="text-muted small ms-2">
-                                                                (Proximamente)
-                                                            </span>
-                                                        </>
-                                                    }
-                                                    name="paymentType"
-                                                    id="mercadoPago"
-                                                    value="mp"
-                                                    checked={formik.values.paymentType === 'mp'}
-                                                    onChange={formik.handleChange}
-                                                    isInvalid={Boolean(formik.errors.paymentType && formik.touched.paymentType)}
-                                                    disabled
-                                                    style={{ opacity: 0.7 }}
-                                                />
-                                            </Col>
-                                            <Col>
-                                                <Form.Check
-                                                    className="radio-button-typePay"
-                                                    type="radio"
-                                                    label="Efectivo"
-                                                    name="paymentType"
-                                                    id="cash"
-                                                    value="cash"
-                                                    checked={formik.values.paymentType === 'cash'}
-                                                    onChange={formik.handleChange}
-                                                    isInvalid={Boolean(formik.errors.paymentType && formik.touched.paymentType)}
-                                                />
-                                            </Col>
-                                        </Row>
-                                        <Form.Control.Feedback type="invalid">
-                                            {formik.errors.paymentType}
-                                        </Form.Control.Feedback>
-                                    </Form.Group>
-                                )}
-
-                                {/* Resumen del pedido */}
-                                <Row>
-                                    <label className="col-label">Resumen de Pedido</label>
-                                </Row>
-                                <div className="scrollable-container">
-                                    {cart.map((product, index) => (
-                                        <Row className="row-colWidht" key={index}>
-                                            <Col>
-                                                <p>{product.item.denomination}</p>
-                                            </Col>
-                                            <Col>
-                                                <p className="truncate-text">{product.item.description}</p>
-                                            </Col>
-                                            <Col>
-                                                <p className="text-rigth">${product.item.price.sellPrice}</p>
-                                            </Col>
-                                        </Row>
-                                    ))}
-                                </div>
-                                <Row className="row-colWidht">
-                                    <Col><p>Forma de entrega:</p></Col>
-                                    <Col><p>{formik.values.deliveryMethod !== "" ? formik.values.deliveryMethod : "Ingrese Forma de Entrega"}</p></Col>
-                                </Row>
-                                <Row className="row-colWidht">
-                                    <Col><p>Forma de pago:</p></Col>
-                                    <Col><p>{formik.values.paymentType !== "" ? (formik.values.paymentType !== "mp" ? "Efectivo" : "Mercado Pago") : "Ingrese Forma de Pago"}</p></Col>
-                                </Row>
-                                <div className="text-rigth">
-                                    <Row>
-                                        <Col><p>{`Subtotal: $${subtotal}`}</p></Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <p>
-                                                {(formik.values.deliveryMethod === 'local')
-                                                    ? `Descuento: $${discount}`
-                                                    : 'Descuento: 0'}
-                                            </p>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col><p>{`Total: $${subtotal - discount}`}</p></Col>
-                                    </Row>
-                                </div>
-                                <Modal.Footer>
-                                    <Button type="submit" disabled={!formik.isValid} className="button-order">
-                                        Confirmar Pedido
-                                    </Button>
-                                </Modal.Footer>
-                            </Form>
-                        </>
-                    ) : (
-                        // <WalletMP preferenceId={idPreference} />
-                        <h1>Proximamente</h1>
+            {/* Items del carrito */}
+            <div className="order-items">
+              {cart.map((product, i) => (
+                <div key={i} className="order-item">
+                  <img
+                    src={product.item.imageUrl || "https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"}
+                    alt={product.item.denomination}
+                  />
+                  <div className="order-item-info">
+                    <span className="order-item-name">{product.item.denomination}</span>
+                    {product.item.description && (
+                      <span className="order-item-desc">{product.item.description}</span>
                     )}
-                </Modal.Body>
-            </Modal>
-        </>
-    );
+                  </div>
+                  <div className="order-item-right">
+                    <span className="order-item-qty">x{product.quantity}</span>
+                    <span className="order-item-price">${product.subtotal.toLocaleString("es-AR")}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
 
+            <div className="order-divider" />
 
-}
-export default OrderForm
+            {/* Método de entrega */}
+            <div className="order-section">
+              <p className="order-section-title">Método de entrega</p>
+              <div className="order-radio-group">
+                <label className={`order-radio-label ${formik.values.deliveryMethod === "delivery" ? "selected" : ""}`}>
+                  <input
+                    type="radio"
+                    name="deliveryMethod"
+                    value="delivery"
+                    onChange={() => {
+                      formik.setFieldValue("deliveryMethod", "delivery");
+                      formik.setFieldValue("paymentType", "");
+                      setIsDelivery(true);
+                    }}
+                  />
+                  <span className="radio-mark" />
+                  Delivery
+                </label>
+                <label className={`order-radio-label ${formik.values.deliveryMethod === "local" ? "selected" : ""}`}>
+                  <input
+                    type="radio"
+                    name="deliveryMethod"
+                    value="local"
+                    onChange={() => {
+                      formik.setFieldValue("deliveryMethod", "local");
+                      formik.setFieldValue("paymentType", "");
+                      setIsDelivery(false);
+                    }}
+                  />
+                  <span className="radio-mark" />
+                  Retiro en local
+                  <span className="order-badge-discount">10% off</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Campos de delivery */}
+            {formik.values.deliveryMethod === "delivery" && (
+              <div className="order-delivery-fields">
+                <div className="order-field">
+                  <label className="order-field-label">Teléfono</label>
+                  <input
+                    className={`order-input ${formik.errors.phone && formik.touched.phone ? "error" : ""}`}
+                    type="number"
+                    name="phone"
+                    placeholder="Ej: 2994000000"
+                    onChange={formik.handleChange}
+                    value={formik.values.phone}
+                  />
+                  {formik.errors.phone && formik.touched.phone && (
+                    <span className="order-field-error">{formik.errors.phone}</span>
+                  )}
+                </div>
+                <div className="order-field">
+                  <label className="order-field-label">Dirección</label>
+                  <input
+                    className={`order-input ${formik.errors.address && formik.touched.address ? "error" : ""}`}
+                    type="text"
+                    name="address"
+                    placeholder="Calle y número"
+                    onChange={formik.handleChange}
+                    value={formik.values.address}
+                  />
+                  {formik.errors.address && formik.touched.address && (
+                    <span className="order-field-error">{formik.errors.address}</span>
+                  )}
+                </div>
+                <div className="order-field">
+                  <label className="order-field-label">Departamento <span className="order-field-optional">(opcional)</span></label>
+                  <input
+                    className="order-input"
+                    type="text"
+                    name="apartment"
+                    placeholder="Piso / depto"
+                    onChange={formik.handleChange}
+                    value={formik.values.apartment}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Forma de pago */}
+            {formik.values.deliveryMethod !== "" && (
+              <div className="order-section">
+                <p className="order-section-title">Forma de pago</p>
+                <div className="order-radio-group">
+                  <label className={`order-radio-label disabled`}>
+                    <input type="radio" name="paymentType" value="mp" disabled />
+                    <span className="radio-mark" />
+                    Mercado Pago
+                    <span className="order-badge-soon">Próximamente</span>
+                  </label>
+                  <label className={`order-radio-label ${formik.values.paymentType === "cash" ? "selected" : ""}`}>
+                    <input
+                      type="radio"
+                      name="paymentType"
+                      value="cash"
+                      checked={formik.values.paymentType === "cash"}
+                      onChange={formik.handleChange}
+                    />
+                    <span className="radio-mark" />
+                    Efectivo
+                  </label>
+                </div>
+              </div>
+            )}
+
+            <div className="order-divider" />
+
+            {/* Totales */}
+            <div className="order-totals">
+              <div className="order-total-row">
+                <span>Subtotal</span>
+                <span>${subtotal.toLocaleString("es-AR")}</span>
+              </div>
+              {discount > 0 && (
+                <div className="order-total-row discount">
+                  <span>Descuento retiro en local (10%)</span>
+                  <span>− ${discount.toLocaleString("es-AR")}</span>
+                </div>
+              )}
+              <div className="order-total-row final">
+                <span>Total</span>
+                <span>${total.toLocaleString("es-AR")}</span>
+              </div>
+            </div>
+
+            {/* Botón submit */}
+            {confirmed ? (
+              <div className="order-success">
+                <BsCheckCircle className="success-icon" />
+                <span>¡Pedido confirmado!</span>
+              </div>
+            ) : (
+              <button
+                type="submit"
+                className="order-confirm-btn"
+                disabled={!formik.isValid || formik.values.deliveryMethod === "" || formik.values.paymentType === ""}
+              >
+                Confirmar pedido
+              </button>
+            )}
+
+          </form>
+        ) : (
+          <div className="order-mp-placeholder">
+            <p className="order-label">Mercado Pago</p>
+            <p className="order-sub">Próximamente disponible</p>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+};
+
+export default OrderForm;
