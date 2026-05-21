@@ -339,8 +339,45 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
             <p className="order-sub">
               Serás redirigido al checkout seguro de MP
             </p>
+
             <div style={{ marginTop: "1rem" }}>
               <Wallet initialization={{ preferenceId: idPreference! }} />
+            </div>
+
+            {/* Datos de prueba */}
+            <div className="mp-test-box">
+              <p className="mp-test-title">
+                ⚠️ Sitio en modo prueba — usá estas credenciales
+              </p>
+              <p className="mp-test-warning">
+                Al continuar serás redirigido a la página de Mercado Pago para
+                completar el pago. Copiá o guardá estas credenciales antes de seguir,
+                ya que esta ventana se cerrará automáticamente.
+              </p>
+              <div className="mp-test-grid">
+                <div className="mp-test-item">
+                  <span className="mp-test-label">Usuario</span>
+                  <span
+                    className="mp-test-value"
+                    onClick={() => navigator.clipboard.writeText("TESTUSER2096913204")}
+                    title="Clic para copiar"
+                  >
+                    TESTUSER2096913204
+                  </span>
+                </div>
+                <div className="mp-test-item">
+                  <span className="mp-test-label">Contraseña</span>
+                  <span className="mp-test-value"
+                    onClick={() => navigator.clipboard.writeText("ol8ooMcvLW")}
+                    title="Clic para copiar">ol8ooMcvLW</span>
+                </div>
+                <div className="mp-test-item">
+                  <span className="mp-test-label">Cód. verificación</span>
+                  <span className="mp-test-value"
+                    onClick={() => navigator.clipboard.writeText("030028")}
+                    title="Clic para copiar">030028</span>
+                </div>
+              </div>
             </div>
           </div>
         )}
