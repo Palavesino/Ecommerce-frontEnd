@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { useEffect } from "react";
+import "./OrderResult.css"
 
 const OrderSuccess = () => {
   const navigate = useNavigate();

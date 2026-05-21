@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-
+import "./OrderResult.css"
 const OrderPending = () => {
   const navigate = useNavigate();
   return (
