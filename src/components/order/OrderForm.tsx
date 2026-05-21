@@ -8,6 +8,8 @@ import { useOrderSave } from "./hook/use-SaveOrder";
 import { Order } from "../../interface/Order";
 import { PaymentStatus } from "../../enum/Paid";
 import { OrderStatus } from "../../enum/OrderStatus";
+import { useCreateMPPreference } from "../../util/useCreateMPPreference";
+import { Wallet } from "@mercadopago/sdk-react";
 
 interface OrderFormProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,6 +22,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
   const [isDelivery, setIsDelivery] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const orderPost = useOrderSave();
+  const { createPreference } = useCreateMPPreference();
 
   const subtotal = cart.reduce((acc, item) => acc + item.subtotal, 0);
   const discount = !isDelivery ? parseFloat((subtotal * 0.1).toFixed(2)) : 0;
@@ -38,18 +41,31 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
   const totalTimeString = `${String(totalHours).padStart(2, "0")}:${String(totalMinutes).padStart(2, "0")}:${String(totalSeconds).padStart(2, "0")}`;
 
   const handleSaveUpdate = async (o: Order) => {
-    if (o.paymentType !== "mp") {
-      setConfirmed(true);
-      setTimeout(() => {
-        clearCart();
-        setShowModal(false);
-        setConfirmed(false);
-      }, 2000);
-    }
-    clearCart();
-    const response = await orderPost(o);
-    if (response && o.paymentType === "mp") {
-      setIdPreference(response.preferenceId);
+    try {
+      const response = await orderPost(o);
+
+      if (!response) {
+        console.error("No se pudo guardar el pedido");
+        return;
+      }
+
+      if (o.paymentType === "mp") {
+        const prefId = await createPreference(o.total);
+        if (prefId) {
+          setIdPreference(prefId);
+        } else {
+          console.error("No se pudo crear la preferencia de MP");
+        }
+      } else {
+        setConfirmed(true);
+        setTimeout(() => {
+          clearCart();
+          setShowModal(false);
+          setConfirmed(false);
+        }, 2000);
+      }
+    } catch (e) {
+      console.error("Error al procesar el pedido:", e);
     }
   };
 
@@ -86,18 +102,29 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
   if (!show) return null;
 
   return (
-    <div className="order-overlay" onClick={() => setShowModal(false)}>
+    <div
+      className="order-overlay"
+      onClick={() => !idPreference && setShowModal(false)}
+    >
       <div className="order-modal" onClick={(e) => e.stopPropagation()}>
 
         {/* Header */}
         <div className="order-header">
           <div>
             <p className="order-label">Confirmar pedido</p>
-            <p className="order-sub">{cart.length} productos · ${subtotal.toLocaleString("es-AR")}</p>
+            <p className="order-sub">
+              {cart.length} productos · ${subtotal.toLocaleString("es-AR")}
+            </p>
           </div>
-          <button className="order-close" onClick={() => setShowModal(false)} aria-label="Cerrar">
-            <RxCross2 />
-          </button>
+          {!idPreference && (
+            <button
+              className="order-close"
+              onClick={() => setShowModal(false)}
+              aria-label="Cerrar"
+            >
+              <RxCross2 />
+            </button>
+          )}
         </div>
 
         <div className="order-divider" />
@@ -110,18 +137,27 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
               {cart.map((product, i) => (
                 <div key={i} className="order-item">
                   <img
-                    src={product.item.imageUrl || "https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"}
+                    src={
+                      product.item.imageUrl ||
+                      "https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png"
+                    }
                     alt={product.item.denomination}
                   />
                   <div className="order-item-info">
-                    <span className="order-item-name">{product.item.denomination}</span>
+                    <span className="order-item-name">
+                      {product.item.denomination}
+                    </span>
                     {product.item.description && (
-                      <span className="order-item-desc">{product.item.description}</span>
+                      <span className="order-item-desc">
+                        {product.item.description}
+                      </span>
                     )}
                   </div>
                   <div className="order-item-right">
                     <span className="order-item-qty">x{product.quantity}</span>
-                    <span className="order-item-price">${product.subtotal.toLocaleString("es-AR")}</span>
+                    <span className="order-item-price">
+                      ${product.subtotal.toLocaleString("es-AR")}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -133,7 +169,9 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
             <div className="order-section">
               <p className="order-section-title">Método de entrega</p>
               <div className="order-radio-group">
-                <label className={`order-radio-label ${formik.values.deliveryMethod === "delivery" ? "selected" : ""}`}>
+                <label
+                  className={`order-radio-label ${formik.values.deliveryMethod === "delivery" ? "selected" : ""}`}
+                >
                   <input
                     type="radio"
                     name="deliveryMethod"
@@ -147,7 +185,9 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
                   <span className="radio-mark" />
                   Delivery
                 </label>
-                <label className={`order-radio-label ${formik.values.deliveryMethod === "local" ? "selected" : ""}`}>
+                <label
+                  className={`order-radio-label ${formik.values.deliveryMethod === "local" ? "selected" : ""}`}
+                >
                   <input
                     type="radio"
                     name="deliveryMethod"
@@ -179,7 +219,9 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
                     value={formik.values.phone}
                   />
                   {formik.errors.phone && formik.touched.phone && (
-                    <span className="order-field-error">{formik.errors.phone}</span>
+                    <span className="order-field-error">
+                      {formik.errors.phone}
+                    </span>
                   )}
                 </div>
                 <div className="order-field">
@@ -193,11 +235,16 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
                     value={formik.values.address}
                   />
                   {formik.errors.address && formik.touched.address && (
-                    <span className="order-field-error">{formik.errors.address}</span>
+                    <span className="order-field-error">
+                      {formik.errors.address}
+                    </span>
                   )}
                 </div>
                 <div className="order-field">
-                  <label className="order-field-label">Departamento <span className="order-field-optional">(opcional)</span></label>
+                  <label className="order-field-label">
+                    Departamento{" "}
+                    <span className="order-field-optional">(opcional)</span>
+                  </label>
                   <input
                     className="order-input"
                     type="text"
@@ -215,13 +262,22 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
               <div className="order-section">
                 <p className="order-section-title">Forma de pago</p>
                 <div className="order-radio-group">
-                  <label className={`order-radio-label disabled`}>
-                    <input type="radio" name="paymentType" value="mp" disabled />
+                  <label
+                    className={`order-radio-label ${formik.values.paymentType === "mp" ? "selected" : ""}`}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentType"
+                      value="mp"
+                      checked={formik.values.paymentType === "mp"}
+                      onChange={formik.handleChange}
+                    />
                     <span className="radio-mark" />
                     Mercado Pago
-                    <span className="order-badge-soon">Próximamente</span>
                   </label>
-                  <label className={`order-radio-label ${formik.values.paymentType === "cash" ? "selected" : ""}`}>
+                  <label
+                    className={`order-radio-label ${formik.values.paymentType === "cash" ? "selected" : ""}`}
+                  >
                     <input
                       type="radio"
                       name="paymentType"
@@ -266,7 +322,11 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
               <button
                 type="submit"
                 className="order-confirm-btn"
-                disabled={!formik.isValid || formik.values.deliveryMethod === "" || formik.values.paymentType === ""}
+                disabled={
+                  !formik.isValid ||
+                  formik.values.deliveryMethod === "" ||
+                  formik.values.paymentType === ""
+                }
               >
                 Confirmar pedido
               </button>
@@ -274,9 +334,14 @@ const OrderForm: React.FC<OrderFormProps> = ({ show, setShowModal }) => {
 
           </form>
         ) : (
-          <div className="order-mp-placeholder">
-            <p className="order-label">Mercado Pago</p>
-            <p className="order-sub">Próximamente disponible</p>
+          <div className="order-mp-wallet">
+            <p className="order-label">Pagar con Mercado Pago</p>
+            <p className="order-sub">
+              Serás redirigido al checkout seguro de MP
+            </p>
+            <div style={{ marginTop: "1rem" }}>
+              <Wallet initialization={{ preferenceId: idPreference! }} />
+            </div>
           </div>
         )}
 
