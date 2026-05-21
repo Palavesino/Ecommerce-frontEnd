@@ -1,0 +1,78 @@
+.order-result-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 130px);
+  gap: 1rem;
+  font-family: 'Jost', sans-serif;
+  background: #F9F3E8;
+  padding: 2rem;
+  text-align: center;
+}
+
+.order-result-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.order-result-icon.success {
+  background: rgba(45, 106, 45, 0.12);
+  color: #2d6a2d;
+  border: 1.5px solid rgba(45, 106, 45, 0.3);
+}
+
+.order-result-icon.failure {
+  background: rgba(192, 57, 43, 0.1);
+  color: #c0392b;
+  border: 1.5px solid rgba(192, 57, 43, 0.25);
+}
+
+.order-result-icon.pending {
+  background: rgba(201, 149, 58, 0.12);
+  color: #C9953A;
+  border: 1.5px solid rgba(201, 149, 58, 0.3);
+}
+
+.order-result-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1A1209;
+  margin: 0;
+}
+
+.order-result-msg {
+  font-size: 14px;
+  color: #8A7A62;
+  max-width: 300px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.order-result-btn {
+  margin-top: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  background: #1A1209;
+  color: #E8C97A;
+  border: 1px solid rgba(201, 149, 58, 0.35);
+  border-radius: 3px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.order-result-btn:hover {
+  background: #C9953A;
+  color: #1A1209;
+  border-color: #C9953A;
+}

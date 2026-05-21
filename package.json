@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@coreui/react": "^5.5.0",
+    "@mercadopago/sdk-react": "^1.0.7",
     "formik": "^2.4.6",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
